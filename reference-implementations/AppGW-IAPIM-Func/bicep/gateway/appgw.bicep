@@ -31,6 +31,7 @@ param certPassword                  string
 var appGatewayPrimaryPip            = 'pip-${appGatewayName}'
 var appGatewayIdentityId            = 'identity-${appGatewayName}'
 var appGatewayResourceId            = resourceId('Microsoft.Network/applicationGateways', appGatewayName)
+var appGatewayBackendHttps          = '${resourceId('Microsoft.Network/applicationGateways', appGatewayName)}/backendHttpSettingsCollection/https'
 
 resource appGatewayIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2018-11-30' = {
   name:     appGatewayIdentityId
@@ -171,7 +172,7 @@ resource appGatewayName_resource 'Microsoft.Network/applicationGateways@2019-09-
           pickHostNameFromBackendAddress: false
           requestTimeout: 20
           probe: {
-            id: concat(appGatewayResourceId, '/probes/APIM')
+            id: resourceId('Microsoft.Network/applicationGateways/probes', appGatewayName, 'APIM')
           }
         }
       }
@@ -181,10 +182,10 @@ resource appGatewayName_resource 'Microsoft.Network/applicationGateways@2019-09-
         name: 'default'
         properties: {
           frontendIPConfiguration: {
-            id: concat(appGatewayResourceId, '/frontendIPConfigurations/appGwPublicFrontendIp')
+            id: resourceId('Microsoft.Network/applicationGateways/frontendIPConfigurations', appGatewayName, 'appGwPublicFrontendIp')
           }
           frontendPort: {
-            id: concat(appGatewayResourceId, '/frontendPorts/port_80')
+            id: resourceId('Microsoft.Network/applicationGateways/frontendPorts', appGatewayName, 'port_80')
           }
           protocol: 'Http'
           hostnames: []
@@ -195,14 +196,14 @@ resource appGatewayName_resource 'Microsoft.Network/applicationGateways@2019-09-
         name: 'https'
         properties: {
           frontendIPConfiguration: {
-            id: concat(appGatewayResourceId, '/frontendIPConfigurations/appGwPublicFrontendIp')
+            id: resourceId('Microsoft.Network/applicationGateways/frontendIPConfigurations', appGatewayName, 'appGwPublicFrontendIp')
           }
           frontendPort: {
-            id: concat(appGatewayResourceId, '/frontendPorts/port_443')
+            id: resourceId('Microsoft.Network/applicationGateways/frontendPorts', appGatewayName, 'port_443')
           }
           protocol: 'Https'
           sslCertificate: {
-            id: concat(appGatewayResourceId, '/sslCertificates/', appGatewayFQDN)
+            id: resourceId('Microsoft.Network/applicationGateways/sslCertificates', appGatewayName, appGatewayFQDN)
           }
           hostnames: []
           requireServerNameIndication: false
@@ -216,13 +217,14 @@ resource appGatewayName_resource 'Microsoft.Network/applicationGateways@2019-09-
         properties: {
           ruleType: 'Basic'
           httpListener: {
-            id: concat(appGatewayResourceId, '/httpListeners/https')
+            id: resourceId('Microsoft.Network/applicationGateways/httpListeners', appGatewayName, 'https')
           }
           backendAddressPool: {
-            id: concat(appGatewayResourceId, '/backendAddressPools/apim')
+            id: resourceId('Microsoft.Network/applicationGateways/backendAddressPools', appGatewayName, 'apim')
           }
           backendHttpSettings: {
-            id: concat(appGatewayResourceId, '/backendHttpSettingsCollection/https')
+            id: resourceId('Microsoft.Network/applicationGateways/backendHttpSettingsCollection', appGatewayName, 'https')
+          }
         }
       }
     ]
