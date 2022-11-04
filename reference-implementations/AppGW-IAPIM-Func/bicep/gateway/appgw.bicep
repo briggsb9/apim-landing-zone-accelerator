@@ -30,8 +30,6 @@ param certPassword                  string
 
 var appGatewayPrimaryPip            = 'pip-${appGatewayName}'
 var appGatewayIdentityId            = 'identity-${appGatewayName}'
-var appGatewayResourceId            = resourceId('Microsoft.Network/applicationGateways', appGatewayName)
-var appGatewayBackendHttps          = '${resourceId('Microsoft.Network/applicationGateways', appGatewayName)}/backendHttpSettingsCollection/https'
 
 resource appGatewayIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2018-11-30' = {
   name:     appGatewayIdentityId
