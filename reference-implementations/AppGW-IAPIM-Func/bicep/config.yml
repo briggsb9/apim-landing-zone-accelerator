@@ -1,7 +1,7 @@
 AZURE_LOCATION: 'uksouth'
 RESOURCE_NAME_PREFIX: 'briggsb9'
 ENVIRONMENT_TAG: 'dev'
-DEPLOYMENT_NAME: 'ase-demo-deployment'
+DEPLOYMENT_NAME: 'ase-demo-deployment-uksouth'
 VM_USERNAME: 'agent'
 ACCOUNT_NAME: 'github.com/briggsb9'
 CICD_AGENT_TYPE: 'azuredevops'
